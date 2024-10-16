@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { socket } from "./socket";
 import { marked } from "marked";
+import "./custom.css"; // Update this import to use custom.css
 
 interface Message {
   role: string;
@@ -77,34 +78,90 @@ export default function Home() {
   useEffect(scrollToBottom, [messages]);
 
   return (
-    <div>
-      <p>Status: {isConnected ? "connected" : "disconnected"}</p>
-      <p>Transport: {transport}</p>
-      <div>
-        <h1>Real-time Chat</h1>
-        <div style={{ height: "400px", overflowY: "auto" }}>
-          {messages.map((msg, index) => (
-            <div key={index}>
-              <strong>{msg.role}:</strong>{" "}
-              {msg.role === "assistant" ? (
-                <div
-                  dangerouslySetInnerHTML={{ __html: marked(msg.content) }}
-                />
-              ) : (
-                msg.content
-              )}
+    <div className="min-h-screen bg-parchment flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl medieval-container shadow-2xl">
+        <div className="relative z-10">
+          <div className="bg-red-900 p-4 border-b-4 border-brown-800">
+            <h1 className="text-4xl font-bold font-medieval text-center text-header">
+              Securing the Realm and Autonomous Adventure
+            </h1>
+            <h2 className="text-2xl text-center mt-2 font-fantasy text-subheader">
+              Demo 2 and 3
+            </h2>
+          </div>
+          <div className="p-6 flex flex-col h-[calc(100vh-12rem)]">
+            <div className="flex justify-end mb-4 space-x-2">
+              <span
+                className={`px-3 py-1 text-sm font-medium rounded ${
+                  isConnected ? "status-connected" : "status-disconnected"
+                }`}
+              >
+                {isConnected ? "Connected" : "Disconnected"}
+              </span>
+              <span className="status-transport px-3 py-1 text-sm font-medium rounded">
+                {transport}
+              </span>
             </div>
-          ))}
-          <div ref={messagesEndRef} />
+            <div className="flex-grow overflow-y-auto mb-4 pr-2 scrollbar-medieval">
+              {messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`mb-4 ${
+                    msg.role === "assistant" ? "text-left" : "text-right"
+                  }`}
+                >
+                  <div
+                    className={`flex flex-col ${
+                      msg.role === "assistant" ? "items-start" : "items-end"
+                    }`}
+                  >
+                    <span className="text-sm text-brown-800 mb-1 font-bold font-fantasy">
+                      {msg.role === "assistant"
+                        ? "Dungeon Master"
+                        : "Adventurer"}
+                    </span>
+                    <div
+                      className={`inline-block p-3 rounded-lg max-w-[80%] ${
+                        msg.role === "assistant"
+                          ? "bg-parchment-dark text-brown-900 border border-brown-300"
+                          : "bg-red-800 text-adventurer"
+                      }`}
+                    >
+                      {msg.role === "assistant" ? (
+                        <div
+                          className="prose prose-sm prose-stone text-message"
+                          dangerouslySetInnerHTML={{
+                            __html: marked(msg.content),
+                          }}
+                        />
+                      ) : (
+                        <p className="font-fantasy text-message">{msg.content}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+            <form onSubmit={handleSubmit} className="flex mt-4">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                className="flex-grow mr-2 input-message border-2 border-brown-600 rounded bg-parchment-dark text-brown-900 focus:outline-none focus:border-brown-800 font-fantasy"
+                placeholder="Speak, brave adventurer..."
+                aria-label="Enter your message"
+              />
+              <button
+                type="submit"
+                className="btn-send rounded font-medieval"
+                aria-label="Send message"
+              >
+                Send
+              </button>
+            </form>
+          </div>
         </div>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
-          <button type="submit">Send</button>
-        </form>
       </div>
     </div>
   );

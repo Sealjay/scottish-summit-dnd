@@ -1,0 +1,126 @@
+/* Add these new styles at the beginning of the file */
+body {
+  background-image: url('/scroll-background.jpg');
+  background-repeat: repeat;
+  background-attachment: fixed;
+}
+
+/* Modify the existing .bg-parchment-light class */
+.bg-parchment-light {
+  background-color: rgba(247, 242, 229, 0.95); /* Increased opacity for better readability */
+}
+
+/* Modify the existing .bg-parchment-dark class */
+.bg-parchment-dark {
+  background-color: rgba(230, 219, 202, 0.95); /* Increased opacity for better readability */
+}
+
+.prose-stone {
+  color: #3d2b22;
+}
+
+.font-medieval {
+  font-family: 'MedievalSharp', cursive;
+}
+
+.font-fantasy {
+  font-family: 'Fondamento', cursive;
+}
+
+.border-medieval {
+  border: 30px solid transparent;
+  border-image: url('/border-medieval.png') 30 stretch;
+  border-image-slice: 30 fill;
+  box-sizing: border-box;
+}
+
+.scrollbar-medieval {
+  scrollbar-width: thin;
+  scrollbar-color: #8B4513 #D2B48C;
+}
+
+.scrollbar-medieval::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-medieval::-webkit-scrollbar-track {
+  background: #D2B48C;
+}
+
+.scrollbar-medieval::-webkit-scrollbar-thumb {
+  background-color: #8B4513;
+  border: 1px solid #D2B48C;
+}
+
+/* Add a new class for the container */
+.medieval-container {
+  position: relative;
+  background-color: rgba(240, 230, 210, 0.5);
+  border: 5px solid transparent;
+  border-image: url('/border-medieval.png') 30 round;
+  border-image-outset: 1;
+  overflow: hidden; /* Ensure content doesn't overflow */
+}
+
+/* Add new styles for improved readability and accessibility */
+.text-header {
+  color: #f8e5c9; /* Light parchment color for better contrast on dark background */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add shadow for better readability */
+}
+
+.text-subheader {
+  color: #f0d6a3; /* Slightly darker than header for visual hierarchy */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.text-adventurer {
+  color: #f8e5c9; /* Light color for better contrast on red background */
+}
+
+.btn-send {
+  background-color: #8b4513; /* Darker brown for better contrast */
+  color: #f8e5c9; /* Light text color */
+  font-size: 1rem; /* Increase font size for better readability */
+  padding: 0.75rem 1.5rem; /* Increase padding for larger touch target */
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.btn-send:hover {
+  background-color: #a0522d; /* Lighter brown on hover */
+}
+
+.btn-send:active {
+  transform: scale(0.98); /* Slight scale effect on click */
+}
+
+.input-message {
+  font-size: 1rem; /* Increase font size for better readability */
+  padding: 0.75rem; /* Increase padding for larger touch target */
+}
+
+/* Improve contrast for connection status indicators */
+.status-connected {
+  background-color: #2f855a; /* Darker green for better contrast */
+  color: #f0fff4; /* Light green text */
+}
+
+.status-disconnected {
+  background-color: #9b2c2c; /* Darker red for better contrast */
+  color: #fff5f5; /* Light red text */
+}
+
+.status-transport {
+  background-color: #975a16; /* Darker yellow for better contrast */
+  color: #fffbeb; /* Light yellow text */
+}
+
+/* Increase font size for better readability */
+.text-message {
+  font-size: 1rem;
+}
+
+/* Add focus styles for better keyboard navigation */
+*:focus {
+  outline: 2px solid #8b4513;
+  outline-offset: 2px;
+}
