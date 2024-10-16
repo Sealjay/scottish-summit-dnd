@@ -16,7 +16,11 @@ const httpServer = createServer(handler);
 const io = new Server(httpServer);
 
 io.on("connection", (socket) => {
-  // ...
+    console.log('New connection established.');
+
+    socket.on('new-message', (message) => {
+        io.emit('new-message', message); // Broadcast the message to all connected clients
+      });
 });
 
 httpServer
