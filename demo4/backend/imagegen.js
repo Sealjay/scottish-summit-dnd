@@ -11,10 +11,6 @@ const client = new AzureOpenAI({
   deployment: deployment,
 });
 
-console.log(process.env.AZURE_OPENAI_KEY);
-console.log(process.env.AZURE_OPENAI_ENDPOINT);
-console.log(deployment);
-
 async function generateImage(imagePrompt, io) {
   // TODO: Add content safety for images too.
   try {

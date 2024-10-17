@@ -3,7 +3,6 @@ import MessageInput from "./MessageInput";
 import MessageList from "./MessageList";
 import ContentSafetyToggle from "./ContentSafetyToggle";
 import ConnectionStatus from "./ConnectionStatus";
-import ImageDisplay from "./ImageDisplay";
 import { useChatState } from "../hooks/useChatState";
 
 const ChatContainer: React.FC = () => {
@@ -17,7 +16,7 @@ const ChatContainer: React.FC = () => {
   } = useChatState();
 
   return (
-    <div className="p-6 flex flex-col h-full overflow-hidden">
+    <div className="pl-2 flex flex-col h-full overflow-hidden">
       <ConnectionStatus isConnected={isConnected} transport={transport} />
       <div className="flex-grow overflow-y-auto">
         <MessageList messages={messages} />

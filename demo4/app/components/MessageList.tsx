@@ -17,6 +17,17 @@ export default function MessageList({ messages }: MessageListProps) {
     setTimeout(scrollToBottom, 100);
   }, [messages]);
 
+  // New function to strip image tags from HTML
+  const stripImageTags = (html: string): string => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    const imgTags = tempDiv.getElementsByTagName("img");
+    while (imgTags.length > 0) {
+      imgTags[0].parentNode?.removeChild(imgTags[0]);
+    }
+    return tempDiv.innerHTML;
+  };
+
   return (
     <div className="flex-grow overflow-y-auto mb-4 pr-2 scrollbar-medieval">
       {messages.map((msg, index) => (
@@ -66,7 +77,7 @@ export default function MessageList({ messages }: MessageListProps) {
                       : ""
                   }`}
                   dangerouslySetInnerHTML={{
-                    __html: marked(msg.content),
+                    __html: stripImageTags(marked(msg.content)),
                   }}
                 />
               ) : (

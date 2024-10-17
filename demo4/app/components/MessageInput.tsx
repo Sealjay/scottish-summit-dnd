@@ -16,7 +16,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ sendMessage }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center h-full">
+    <form onSubmit={handleSubmit} className="flex-grow flex">
       <input
         type="text"
         value={message}
