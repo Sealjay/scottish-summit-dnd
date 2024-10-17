@@ -20,15 +20,10 @@ The technical overview will include audio inputs for voice and natural language 
 - DEMO7: Azure OpenAI + Image generation + Voice + Memory + Finetuning
 - DEMO8: Azure OpenAI + Image generation + Voice + Memory + Finetuning + Multi-Agent framework
 
-
-## Conda
-Conda projects require a conda environment to be created and activated before running the project. This can be done by running the following commands in the project root directory:
-
-```bash
-conda update conda
-conda create -n ssd -c conda-forge jupyterlab python=3.11
-conda activate ssd
-```
-
+## Example of demo outputs
+### Demos 2 & 3
+![Demo 3](./assets/demo2and3.png)
+### Demo 4
+![Demo 4](./assets/demo4.png)
 ## Contributing
 This repository uses [GitHub flow](https://guides.github.com/introduction/flow/).
