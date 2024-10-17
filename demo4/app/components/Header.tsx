@@ -5,7 +5,7 @@ export default function Header() {
         Securing the Realm and Autonomous Adventure
       </h1>
       <h2 className="text-2xl text-center mt-2 font-fantasy text-subheader">
-        Demo 2 and 3: Starting to build... safely and securely
+        Demo 4: Adding immersion with image generation
       </h2>
     </div>
   );

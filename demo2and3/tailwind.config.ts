@@ -11,7 +11,10 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-
+        'dark-green': '#006400',
+        'emerald-700': '#047857',
+        'emerald-300': '#6ee7b7',
+        'parchment-light': '#f3e8d6',
         brown: {
           50: '#fdf8f6',
           100: '#f2e8e5',
