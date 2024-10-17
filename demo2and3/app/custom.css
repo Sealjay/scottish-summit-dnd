@@ -94,8 +94,9 @@ body {
 }
 
 .input-message {
-  font-size: 1rem; /* Increase font size for better readability */
-  padding: 0.75rem; /* Increase padding for larger touch target */
+  font-size: 1rem;
+  padding: 0.75rem;
+  color: #000000; /* Set text color to black */
 }
 
 /* Improve contrast for connection status indicators */
@@ -123,4 +124,10 @@ body {
 *:focus {
   outline: 2px solid #8b4513;
   outline-offset: 2px;
+}
+
+/* Add this new class for the content safety warning message */
+.content-safety-warning {
+  background-color: #ff0000 !important; /* Red background */
+  color: #ffff00 !important; /* Yellow text */
 }

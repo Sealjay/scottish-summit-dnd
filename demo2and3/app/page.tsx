@@ -9,6 +9,7 @@ interface Message {
   role: string;
   content: string;
   type: string;
+  contentSafety: boolean; // New property
 }
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
   const [transport, setTransport] = useState("N/A");
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
+  const [contentSafetyEnabled, setContentSafetyEnabled] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -24,10 +26,11 @@ export default function Home() {
 
   const sendMessage = (messageText: string) => {
     if (messageText.trim() !== "") {
-      const newMessage = {
+      const newMessage: Message = {
         role: "user",
         content: messageText,
         type: "text",
+        contentSafety: contentSafetyEnabled, // Include the content safety status
       };
       const updatedMessages = [...messages, newMessage];
       socket.emit("message-history", updatedMessages);
@@ -119,23 +122,48 @@ export default function Home() {
                       {msg.role === "assistant"
                         ? "Dungeon Master"
                         : "Adventurer"}
+                      {msg.role === "user" && (
+                        <span
+                          className={`ml-2 text-xs ${
+                            msg.contentSafety
+                              ? "text-emerald-700"
+                              : "text-red-600"
+                          }`}
+                        >
+                          {msg.contentSafety ? "(Safe)" : "(Unsafe)"}
+                        </span>
+                      )}
                     </span>
                     <div
                       className={`inline-block p-3 rounded-lg max-w-[80%] ${
                         msg.role === "assistant"
                           ? "bg-parchment-dark text-brown-900 border border-brown-300"
                           : "bg-red-800 text-adventurer"
+                      } ${
+                        msg.role === "assistant" &&
+                        msg.content ===
+                          "I'm sorry, your message has been blocked due to content safety concerns."
+                          ? "content-safety-warning"
+                          : ""
                       }`}
                     >
                       {msg.role === "assistant" ? (
                         <div
-                          className="prose prose-sm prose-stone text-message"
+                          className={`prose prose-sm prose-stone text-message  ${
+                            msg.role === "assistant" &&
+                            msg.content ===
+                              "I'm sorry, your message has been blocked due to content safety concerns."
+                              ? "content-safety-warning"
+                              : ""
+                          }`}
                           dangerouslySetInnerHTML={{
                             __html: marked(msg.content),
                           }}
                         />
                       ) : (
-                        <p className="font-fantasy text-message">{msg.content}</p>
+                        <p className="font-fantasy text-message">
+                          {msg.content}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -143,7 +171,7 @@ export default function Home() {
               ))}
               <div ref={messagesEndRef} />
             </div>
-            <form onSubmit={handleSubmit} className="flex mt-4">
+            <form onSubmit={handleSubmit} className="flex mt-4 items-center">
               <input
                 type="text"
                 value={input}
@@ -154,11 +182,38 @@ export default function Home() {
               />
               <button
                 type="submit"
-                className="btn-send rounded font-medieval"
+                className="btn-send rounded font-medieval mr-2"
                 aria-label="Send message"
               >
                 Send
               </button>
+              <div className="flex items-center">
+                <label className="inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={contentSafetyEnabled}
+                    onChange={() =>
+                      setContentSafetyEnabled(!contentSafetyEnabled)
+                    }
+                    className="sr-only peer"
+                  />
+                  <div className="relative w-14 h-7 bg-brown-400 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brown-300 rounded-full peer peer-checked:bg-emerald-700 transition-colors duration-300">
+                    <div className="absolute inset-1 bg-parchment-light rounded-full shadow-inner"></div>
+                    <div
+                      className={`absolute inset-y-1 w-5 h-5 bg-red-600 rounded-full shadow transition-all duration-300 ${
+                        contentSafetyEnabled
+                          ? "right-1 bg-emerald-300"
+                          : "left-1"
+                      }`}
+                    >
+                      <div className="absolute inset-1 bg-white rounded-full"></div>
+                    </div>
+                  </div>
+                  <span className="ml-3 text-sm font-medium text-brown-800 font-fantasy">
+                    Content safety?
+                  </span>
+                </label>
+              </div>
             </form>
           </div>
         </div>
