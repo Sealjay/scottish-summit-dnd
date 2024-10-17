@@ -7,6 +7,7 @@ export function useChatState() {
     const [transport, setTransport] = useState("N/A");
     const [messages, setMessages] = useState<Message[]>([]);
     const [contentSafetyEnabled, setContentSafetyEnabled] = useState(false);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     const sendMessage = (messageText: string) => {
         if (messageText.trim() !== "") {
@@ -44,14 +45,21 @@ export function useChatState() {
             setMessages((prevMessages) => [...prevMessages, message]);
         }
 
+        function onSetImageUrl(url: string) {
+            console.log("Setting image URL:", url);
+            setImageUrl(url);
+        }
+
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
         socket.on("new-message", onNewMessage);
+        socket.on("set-image-url", onSetImageUrl);
 
         return () => {
             socket.off("connect", onConnect);
             socket.off("disconnect", onDisconnect);
             socket.off("new-message", onNewMessage);
+            socket.off("set-image-url", onSetImageUrl);
         };
     }, []);
 
@@ -62,5 +70,6 @@ export function useChatState() {
         contentSafetyEnabled,
         setContentSafetyEnabled,
         sendMessage,
+        imageUrl,
     };
 }

@@ -21,11 +21,10 @@ io.on("connection", (socket) => {
 
   socket.on("message-history", async (history) => {
     console.log("New message history received.");
-    console.log(history);
     if (history.length > 0) {
       const mostRecentMessage = history[history.length - 1];
       io.emit("new-message", mostRecentMessage);
-      const aiResponseContent = await generateResponse(history);
+      const aiResponseContent = await generateResponse(history, io);
       const response = {
         role: "assistant",
         content: aiResponseContent,

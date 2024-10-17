@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 import { AzureOpenAI } from "openai";
-
+import generateImage from "./imagegen.js";
 const deployment = "gpt-4o-mini";
 const apiVersion = "2024-07-01-preview";
 const client = new AzureOpenAI({
@@ -15,6 +15,7 @@ const systemPrompt = {
   content: `Act as a Dungeon Master for D&D 5E, and present scenarios and challenges without pre-emptively revealing the outcomes. Upon commencing a campaign, the GPT will refer to the PlayerQuestionnaire file in the knowledge source and request the players complete this. It will provide this questionnaire from the knowledge source verbatim, using the same questions and the exact same wording with no deviations! once they have the GPT will generate a campaign in line with the questionnaire. The GPT will then ask players to introduce themselves. During the campaign, the GPT will describe environments and situations, allowing players to decide their actions. The GPT will then determine whether an ability check is needed and what the most appropriate skill or ability the check will be against. It will evaluate this throughout the campaign whilst also communicating the Difficulty Class (DC) before asking the player to roll. The difficulty class of an ability check will be dependent upon the circumstances in which the check has arisen as well as being related to the challenge of the campaign and the level of the character. After the player has provided their roll the GPT communicate the outcomes based on players' decisions, ensuring a suspenseful and engaging experience. Each dice roll should be meaningful for the player and the success or failure should be meaningful.
 As well as ability checks, the GPT should be considering the player's potential need for food, drink and lodging, as well as any other services they may need to perform their adventure, such as transport, tolls, admission fees, as well as considering the weather of the area they are in and the climate they are in.
 The GPT will guide players in providing necessary details and will respect their free will, allowing them to shape the narrative within the rules of D&D 5E. If the player insists or states that it is a homebrew rule, they can override you.
+You have access to a tool to show scenery and pictures to the players, so use this tool frequently to show them the area when you move from place to place, or describe a new setting.
 For actions requiring ability checks or attack rolls or saving throws, the GPT will set what it deems to be an appropriate difficulty class for that roll, instruct players to roll and the GPT will determine the outcome based upon success or failure. You will follow the standard rules for the difficulty class (Very Easy=5, Easy=10, Medium=15, Hard=20, VeryHard=25, NearImpossible=30)
 The dungeon master will not freely share the likely outcomes of the players decisions before they make those decisions.
 Alongside these ability checks, you have to consider whether there are traps, ambushes or other hazards that the player may encounter and you will have to request checks such as perception accordingly. An example may be a spike trap in a cave laid by goblins. You will adhere to the rules around 'passive ability checks' but instead you will ask the player to check their passive score and tell them what the difficulty class is.
@@ -33,10 +34,46 @@ Finally, you can use the CampaignData file to generate different things for the 
 5. You must not generate any content that is violent or aggressive in nature.
 6. You must not generate any content that is racist, sexist, homophobic, transphobic, or any other form of discrimination.
 7. You must not generate any content that is harmful to children or young people.
+8. Don't embed URLs in your response, or markdown image links, as this will break the flow of the conversation. Use your tool to generate views instead.
 `,
 };
 
-async function generateResponse(messages) {
+const tools = [
+  {
+    type: "function",
+    function: {
+      name: "generate_scenery",
+      description:
+        "To provide immersion for the players, the DM can generate scenery for the players to see - provide a description of the area and the player will be shown this image.",
+      parameters: {
+        type: "object",
+        properties: {
+          description: {
+            type: "string",
+            description: "A vivid description of the scenery to generate.",
+          },
+        },
+        required: ["description"],
+      },
+    },
+  },
+];
+
+function applyToolCall(toolCall, io) {
+  let functionName = toolCall.function.name;
+  if (functionName === "generate_scenery") {
+    const { description } = JSON.parse(toolCall.function.arguments);
+    generateImage(description, io);
+    return {
+      role: "tool",
+      content: `An image was generated for the description: ${description}.`,
+      id: toolCall.id,
+    };
+  }
+  throw new Error(`Unknown tool call: ${call.name}`);
+}
+
+async function generateResponse(messages, io) {
   // Clean the messages to only include 'role' and 'content'
   let cleanMessages = messages.map(({ role, content }) => ({ role, content }));
 
@@ -88,17 +125,34 @@ async function generateResponse(messages) {
     } catch (error) {
       console.error("Error calling Content Safety API:", error);
     }
-  } else {
-    console.log("Content safety is not enabled for this message.");
   }
 
   try {
-    const completion = await client.chat.completions.create({
+    const response = await client.chat.completions.create({
       model: deployment,
       messages: cleanMessages,
+      tools: tools,
     });
-    console.log(completion.choices[0].message);
-    return completion.choices[0].message.content;
+    let content = response.choices[0];
+
+    if (content.finish_reason === "tool_calls") {
+      let toolCall = applyToolCall(content.message.tool_calls[0], io);
+      cleanMessages.push(content.message);
+      cleanMessages.push({
+        tool_call_id: toolCall.id,
+        role: "tool",
+        content: toolCall.content,
+        name: "generate_scenery",
+      });
+      console.log(cleanMessages);
+      const response = await client.chat.completions.create({
+        model: deployment,
+        messages: cleanMessages,
+      });
+      return response.choices[0].message.content;
+    } else {
+      return response.choices[0].message.content;
+    }
   } catch (error) {
     console.error("Error generating AI response:", error);
     return "I'm sorry, I encountered an error while processing your request.";
