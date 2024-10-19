@@ -1,0 +1,4 @@
+azure-search-documents
+PyPDF2
+python-dotenv
+beautifulsoup4

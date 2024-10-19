@@ -11,6 +11,13 @@ We'll explore the technical architecture behind deploying LLMs and fine tuned SL
 
 The technical overview will include audio inputs for voice and natural language understanding, enhancing player-AI interaction. Content generation by language models will be examined, demonstrating how AI can dynamically adapt stories, environments, and challenges in response to player actions.
 
+## Creating a python venv
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
 ## List of Demos
 - DEMO1: [Link to ChatGPT](https://chatgpt.com/g/g-iPYbbC5Ft-securing-the-realm)
 - DEMO2 - 3: Azure OpenAI + Basic chat interface; plus security features
