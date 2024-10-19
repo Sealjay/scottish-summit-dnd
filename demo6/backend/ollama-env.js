@@ -3,7 +3,7 @@ import ollama from "ollama";
 async function generateAmbient(imagePrompt, io) {
   console.log("Generating ambient event");
   const response = await ollama.chat({
-    model: "llama3.1",
+    model: "phi3:latest",
     messages: [
       {
         role: "user",

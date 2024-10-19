@@ -3,7 +3,7 @@ import { marked } from "marked";
 import { Message } from "../types";
 
 const speak = (text: string) => {
-  if ('speechSynthesis' in window) {
+  if ("speechSynthesis" in window) {
     const utterance = new SpeechSynthesisUtterance(text);
     window.speechSynthesis.speak(utterance);
   } else {
