@@ -1,6 +1,15 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { marked } from "marked";
 import { Message } from "../types";
+
+const speak = (text: string) => {
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(utterance);
+  } else {
+    console.log("Text-to-speech not supported in this browser.");
+  }
+};
 
 interface MessageListProps {
   messages: Message[];
@@ -15,6 +24,14 @@ export default function MessageList({ messages }: MessageListProps) {
 
   useEffect(() => {
     setTimeout(scrollToBottom, 100);
+  }, [messages]);
+
+  // Add this useEffect to handle text-to-speech for new assistant messages
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage && lastMessage.role === "assistant") {
+      speak(lastMessage.content);
+    }
   }, [messages]);
 
   // New function to strip image tags from HTML
