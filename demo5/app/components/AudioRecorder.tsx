@@ -4,12 +4,14 @@ interface AudioRecorderProps {
   isRecording: boolean;
   setIsRecording: (isRecording: boolean) => void;
   sendAudio: (audio: Blob) => void;
+  sendTranscribedMessage: (message: string) => void;
 }
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
   isRecording,
   setIsRecording,
   sendAudio,
+  sendTranscribedMessage,
 }) => {
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
     null
@@ -57,9 +59,19 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         [] as number[]
       );
       const int16Data = new Int16Array(flatAudioData.map((n) => n * 32767));
-
+      
       const audioBlob = new Blob([int16Data], { type: "audio/pcm" });
-      sendAudio(audioBlob);
+      sendAudio(audioBlob)
+        .then((response) => {
+          if (response && response.transcription) {
+            sendTranscribedMessage(response.transcription);
+          } else {
+            console.error("No transcription received:", response);
+          }
+        })
+        .catch((error) => {
+          console.error("Error sending audio:", error);
+        });
 
       audioData.current = [];
       setIsRecording(false);

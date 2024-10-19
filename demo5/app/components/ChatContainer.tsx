@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import MessageInput from "./MessageInput";
-import MessageList from "./MessageList";
-import ContentSafetyToggle from "./ContentSafetyToggle";
-import ConnectionStatus from "./ConnectionStatus";
 import { useChatState } from "../hooks/useChatState";
+import MessageList from "./MessageList";
+import MessageInput from "./MessageInput";
+import ConnectionStatus from "./ConnectionStatus";
 
 const ChatContainer: React.FC = () => {
   const {
@@ -15,31 +14,26 @@ const ChatContainer: React.FC = () => {
     sendMessage,
   } = useChatState();
 
-  const sendAudio = async (audioBlob: Blob) => {
+  const [instanceId] = useState(() => Math.random().toString(36).substr(2, 9));
+
+  useEffect(() => {
+    console.log(`ChatContainer mounted. Instance ID: ${instanceId}`);
+    return () => {
+      console.log(`ChatContainer unmounted. Instance ID: ${instanceId}`);
+    };
+  }, [instanceId]);
+
+  const sendAudio = async (audio: Blob) => {
     const formData = new FormData();
-    formData.append('audio', audioBlob, 'recording.wav');
-    formData.append('messages', JSON.stringify(messages));
+    formData.append("audio", audio, "audio.pcm");
+    formData.append("messages", JSON.stringify(messages));
 
-    try {
-      const response = await fetch('/api/audio', {
-        method: 'POST',
-        body: formData,
-      });
+    const response = await fetch("/api/audio", {
+      method: "POST",
+      body: formData,
+    });
 
-      if (response.ok) {
-        const data = await response.json();
-        // Handle the transcribed text and AI response
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { role: 'user', content: data.transcription },
-          { role: 'assistant', content: data.aiResponse },
-        ]);
-      } else {
-        console.error('Error processing audio');
-      }
-    } catch (error) {
-      console.error('Error sending audio:', error);
-    }
+    return response.json();
   };
 
   return (
@@ -49,8 +43,9 @@ const ChatContainer: React.FC = () => {
         <MessageList messages={messages} />
       </div>
       <div className="h-16 flex items-center">
-        <MessageInput sendMessage={sendMessage} sendAudio={sendAudio} />
-        <ContentSafetyToggle
+        <MessageInput
+          sendMessage={sendMessage}
+          sendAudio={sendAudio}
           contentSafetyEnabled={contentSafetyEnabled}
           setContentSafetyEnabled={setContentSafetyEnabled}
         />

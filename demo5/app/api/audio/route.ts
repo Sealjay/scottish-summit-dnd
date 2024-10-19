@@ -44,7 +44,6 @@ export async function POST(req: NextRequest) {
                 (result) => {
                     recognizer.close();
                     resolve(result);
-                    console.log("Recognition result:", result);
                 },
                 (error) => {
                     recognizer.close();

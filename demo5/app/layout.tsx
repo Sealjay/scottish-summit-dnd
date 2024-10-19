@@ -34,9 +34,7 @@ export default function RootLayout({
       >
         <div className="w-full max-w-7xl medieval-container shadow-2xl flex flex-col h-full">
           <Header />
-          <div className="flex-grow overflow-hidden">
-            {children}
-          </div>
+          <div className="flex-grow overflow-hidden">{children}</div>
         </div>
       </body>
     </html>
