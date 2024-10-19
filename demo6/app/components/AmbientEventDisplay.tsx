@@ -25,7 +25,7 @@ const AmbientEventDisplay: React.FC = () => {
     };
 
     scrollToBottom();
-    const timeoutId = setTimeout(scrollToBottom, 0);
+    const timeoutId = setTimeout(scrollToBottom, 50);
 
     return () => clearTimeout(timeoutId);
   }, [events]);
@@ -35,7 +35,11 @@ const AmbientEventDisplay: React.FC = () => {
       <div
         ref={scrollRef}
         className="flex-grow overflow-y-auto bg-parchment border-2 border-gray-400 rounded-lg p-2 text-sm"
-        style={{ maxHeight: 'calc(100vh - 512px - 6rem)' }} // Adjust 6rem as needed for margins/padding
+        style={{
+          height: '200px', // Fixed height
+          maxHeight: 'calc(100vh - 512px - 6rem)',
+          overflowY: 'auto', // Ensure vertical scrollbar appears when needed
+        }}
       >
         {events.map((event, index) => (
           <p
