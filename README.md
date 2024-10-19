@@ -16,9 +16,16 @@ The technical overview will include audio inputs for voice and natural language 
 - DEMO2 - 3: Azure OpenAI + Basic chat interface; plus security features
 - DEMO4: Azure OpenAI + Image generation
 - DEMO5: Azure OpenAI + Image generation + Voice
-- DEMO6: Azure OpenAI + Image generation + Voice + Memory
-- DEMO7: Azure OpenAI + Image generation + Voice + Memory + Finetuning
-- DEMO8: Azure OpenAI + Image generation + Voice + Memory + Finetuning + Multi-Agent framework
+- DEMO6: Azure OpenAI + Image generation + Voice + SLMs
+- DEMO7: Azure OpenAI + Image generation + Voice + SLMs + RAG v Finetuning
+- DEMO8: Azure OpenAI + Image generation + Voice + SLMs + RAG v Finetuning + Memory
+
+### Future
+- 3D https://openai.com/index/point-e/
+- Adaptive cards - https://learn.microsoft.com/en-us/adaptive-cards/ https://adaptivecards.io/
+- Teams integration
+- Agentic AI - improves token window, improves realism https://learn.microsoft.com/en-us/semantic-kernel/overview/
+
 
 ## Example of demo outputs
 ### Demos 2 & 3

@@ -1,0 +1,5 @@
+.medieval-container {
+  background-color: #f0e6d2; /* Parchment-like background color */
+  border-image: url('/path/to/your/border-image.png') 30 round;
+  border-image-outset: 1;
+}
