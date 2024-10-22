@@ -4,6 +4,8 @@
 [![Python](https://img.shields.io/badge/--3178C6?logo=python&logoColor=ffffff)](https://www.python.org/)
 [![Azure](https://img.shields.io/badge/--3178C6?logo=microsoftazure&logoColor=ffffff)](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/?WT.mc_id=AI-MVP-5004204)
 
+The slides from [Scottish Summit 2024](https://www.scottishsummit.com/) can be found here [Link to slides](Chris Lloyd-Jones & Josh McDonald - Securing the Realm.pdf).
+
 ## Overview
 Dungeons & Dragons (D&D) has long thrived on the creativity and guidance of the Dungeon Master (DM), orchestrating adventures for players. Recent advancements in AI and large language models (LLMs) present a new opportunity: a DM-less D&D experience. This session focuses on the practical application of LLMs and SLMs to facilitate an autonomous, engaging tabletop RPG experience, allowing every player to take in the narrative.
 
@@ -24,6 +26,7 @@ pip install -r requirements.txt
 - DEMO4: Azure OpenAI + Image generation
 - DEMO5: Azure OpenAI + Image generation + Voice
 - DEMO6: Azure OpenAI + Image generation + Voice + SLMs
+### Not yet built
 - DEMO7: Azure OpenAI + Image generation + Voice + SLMs + RAG v Finetuning
 - DEMO8: Azure OpenAI + Image generation + Voice + SLMs + RAG v Finetuning + Memory
 
